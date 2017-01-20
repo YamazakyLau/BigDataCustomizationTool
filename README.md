@@ -15,3 +15,7 @@
 7.	特殊数据-->手机号码，支持手机号码13000000000~13999999999。
 8.	特殊数据-->银行卡号支持62257720【0000000000】【?】~62257720【9999999999】【?】。其中中括号内10位数字可以变更，【?】由于必须符合格式，需要计算后得出。
 9.	特殊数据-->身份证号支持21【0000】19【00】021【0000】【?】~21【9999】19【99】021【9999】【?】，其中中括号内10位数字可以变更，【?】由于必须符合格式，需要计算后得出。
+
+#####3.其它说明：
+下载地址：[BigDataCustomizationTool.zip](https://github.com/YamazakyLau/BigDataCustomizationTool/blob/master/BigDataCustomizationTool.zip "下载安装档")
+工具界面预览：[工具界面预览](https://github.com/YamazakyLau/BigDataCustomizationTool/blob/master/%E8%BD%AF%E4%BB%B6%E6%88%AA%E5%9B%BE.png "查看")
