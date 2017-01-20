@@ -18,4 +18,5 @@
 
 #####3.其它说明：
 下载地址：[BigDataCustomizationTool.zip](https://github.com/YamazakyLau/BigDataCustomizationTool/blob/master/BigDataCustomizationTool.zip "下载安装档")
-工具界面预览：[工具界面预览](https://github.com/YamazakyLau/BigDataCustomizationTool/blob/master/%E8%BD%AF%E4%BB%B6%E6%88%AA%E5%9B%BE.png "查看")
+*************
+工具界面预览：![工具界面预览](https://github.com/YamazakyLau/BigDataCustomizationTool/blob/master/%E8%BD%AF%E4%BB%B6%E6%88%AA%E5%9B%BE.png "查看")
