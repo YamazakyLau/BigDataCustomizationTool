@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -175,7 +175,7 @@ namespace BigDataCustomizationTool
             {
                 string fileName = "";
                 if (this.textBoxCreateFileName.Text != "" && this.textBoxCreateFileName.Text.Length > 0)
-                { fileName = this.textBoxCreateFileName.Text; }
+                { fileName = this.textBoxCreateFileName.Text + ".txt"; }
                 else
                 { fileName = "BigDataPrint.txt"; }
 
@@ -402,7 +402,7 @@ namespace BigDataCustomizationTool
         {
             string fileName = "";
             if (this.textBoxCreateFileName.Text != "" && this.textBoxCreateFileName.Text.Length > 0)
-            {fileName = this.textBoxCreateFileName.Text;}
+            {fileName = this.textBoxCreateFileName.Text + ".txt";}
             else
             {fileName = "BigDataPrint.txt";}
 
