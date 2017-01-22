@@ -1,4 +1,4 @@
-namespace BigDataCustomizationTool
+﻿namespace BigDataCustomizationTool
 {
     partial class FormMain
     {
@@ -92,6 +92,11 @@ namespace BigDataCustomizationTool
             this.buttonCreateDataNow = new System.Windows.Forms.Button();
             this.buttonCreateDataTest = new System.Windows.Forms.Button();
             this.progressBarCreateStatus = new System.Windows.Forms.ProgressBar();
+            this.buttonSaveSettings = new System.Windows.Forms.Button();
+            this.labelProgress = new System.Windows.Forms.Label();
+            this.buttonLoadFromXML = new System.Windows.Forms.Button();
+            this.labelCreateFileName = new System.Windows.Forms.Label();
+            this.textBoxCreateFileName = new System.Windows.Forms.TextBox();
             this.groupBoxEachGeneration.SuspendLayout();
             this.tabControlCreateTotal.SuspendLayout();
             this.tabPageNumb.SuspendLayout();
@@ -446,7 +451,7 @@ namespace BigDataCustomizationTool
             // 
             // buttonOtHelpCircleItems
             // 
-            this.buttonOtHelpCircleItems.Location = new System.Drawing.Point(477, 187);
+            this.buttonOtHelpCircleItems.Location = new System.Drawing.Point(463, 20);
             this.buttonOtHelpCircleItems.Name = "buttonOtHelpCircleItems";
             this.buttonOtHelpCircleItems.Size = new System.Drawing.Size(84, 23);
             this.buttonOtHelpCircleItems.TabIndex = 0;
@@ -457,6 +462,7 @@ namespace BigDataCustomizationTool
             // groupBoxEachGeneration
             // 
             this.groupBoxEachGeneration.Controls.Add(this.labelOtNotes);
+            this.groupBoxEachGeneration.Controls.Add(this.buttonOtHelpCircleItems);
             this.groupBoxEachGeneration.Controls.Add(this.textBoxPINCodes);
             this.groupBoxEachGeneration.Controls.Add(this.textBoxOtRandomBIN);
             this.groupBoxEachGeneration.Controls.Add(this.textBoxOtRandomMobileNumb);
@@ -966,18 +972,19 @@ namespace BigDataCustomizationTool
             this.labelCreatingMethods.AutoSize = true;
             this.labelCreatingMethods.Location = new System.Drawing.Point(10, 266);
             this.labelCreatingMethods.Name = "labelCreatingMethods";
-            this.labelCreatingMethods.Size = new System.Drawing.Size(125, 12);
+            this.labelCreatingMethods.Size = new System.Drawing.Size(323, 12);
             this.labelCreatingMethods.TabIndex = 2;
-            this.labelCreatingMethods.Text = "请输入生成语法规则：";
+            this.labelCreatingMethods.Text = "请输入生成语法规则：（或双击输入框从XML导入全部规则）";
             // 
             // textBoxCreatingMethods
             // 
-            this.textBoxCreatingMethods.Location = new System.Drawing.Point(10, 285);
+            this.textBoxCreatingMethods.Location = new System.Drawing.Point(12, 285);
             this.textBoxCreatingMethods.MaxLength = 1200;
             this.textBoxCreatingMethods.Multiline = true;
             this.textBoxCreatingMethods.Name = "textBoxCreatingMethods";
-            this.textBoxCreatingMethods.Size = new System.Drawing.Size(590, 62);
+            this.textBoxCreatingMethods.Size = new System.Drawing.Size(588, 62);
             this.textBoxCreatingMethods.TabIndex = 0;
+            this.textBoxCreatingMethods.DoubleClick += new System.EventHandler(this.textBoxCreatingMethods_DoubleClicked);
             // 
             // tabControlCreateTotal
             // 
@@ -1122,7 +1129,8 @@ namespace BigDataCustomizationTool
             // 
             // tabPageOthers
             // 
-            this.tabPageOthers.Controls.Add(this.buttonOtHelpCircleItems);
+            this.tabPageOthers.Controls.Add(this.textBoxCreateFileName);
+            this.tabPageOthers.Controls.Add(this.labelCreateFileName);
             this.tabPageOthers.Controls.Add(this.groupBoxEachGeneration);
             this.tabPageOthers.Location = new System.Drawing.Point(4, 22);
             this.tabPageOthers.Name = "tabPageOthers";
@@ -1133,9 +1141,11 @@ namespace BigDataCustomizationTool
             // 
             // buttonCreateDataNow
             // 
+            this.buttonCreateDataNow.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.buttonCreateDataNow.ForeColor = System.Drawing.Color.Blue;
             this.buttonCreateDataNow.Location = new System.Drawing.Point(525, 353);
             this.buttonCreateDataNow.Name = "buttonCreateDataNow";
-            this.buttonCreateDataNow.Size = new System.Drawing.Size(75, 23);
+            this.buttonCreateDataNow.Size = new System.Drawing.Size(75, 52);
             this.buttonCreateDataNow.TabIndex = 3;
             this.buttonCreateDataNow.Text = "开始生成";
             this.buttonCreateDataNow.UseVisualStyleBackColor = true;
@@ -1143,9 +1153,9 @@ namespace BigDataCustomizationTool
             // 
             // buttonCreateDataTest
             // 
-            this.buttonCreateDataTest.Location = new System.Drawing.Point(416, 353);
+            this.buttonCreateDataTest.Location = new System.Drawing.Point(376, 382);
             this.buttonCreateDataTest.Name = "buttonCreateDataTest";
-            this.buttonCreateDataTest.Size = new System.Drawing.Size(75, 23);
+            this.buttonCreateDataTest.Size = new System.Drawing.Size(132, 23);
             this.buttonCreateDataTest.TabIndex = 4;
             this.buttonCreateDataTest.Text = "演示一下";
             this.buttonCreateDataTest.UseVisualStyleBackColor = true;
@@ -1153,17 +1163,65 @@ namespace BigDataCustomizationTool
             // 
             // progressBarCreateStatus
             // 
-            this.progressBarCreateStatus.Location = new System.Drawing.Point(10, 353);
+            this.progressBarCreateStatus.Location = new System.Drawing.Point(81, 353);
             this.progressBarCreateStatus.Name = "progressBarCreateStatus";
-            this.progressBarCreateStatus.Size = new System.Drawing.Size(400, 23);
+            this.progressBarCreateStatus.Size = new System.Drawing.Size(427, 23);
             this.progressBarCreateStatus.TabIndex = 5;
-            this.progressBarCreateStatus.Visible = false;
+            // 
+            // buttonSaveSettings
+            // 
+            this.buttonSaveSettings.Location = new System.Drawing.Point(10, 382);
+            this.buttonSaveSettings.Name = "buttonSaveSettings";
+            this.buttonSaveSettings.Size = new System.Drawing.Size(132, 23);
+            this.buttonSaveSettings.TabIndex = 6;
+            this.buttonSaveSettings.Text = "保存配置到XML文档";
+            this.buttonSaveSettings.UseVisualStyleBackColor = true;
+            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
+            // 
+            // labelProgress
+            // 
+            this.labelProgress.AutoSize = true;
+            this.labelProgress.Location = new System.Drawing.Point(10, 359);
+            this.labelProgress.Name = "labelProgress";
+            this.labelProgress.Size = new System.Drawing.Size(65, 12);
+            this.labelProgress.TabIndex = 7;
+            this.labelProgress.Text = "生成进度：";
+            // 
+            // buttonLoadFromXML
+            // 
+            this.buttonLoadFromXML.Location = new System.Drawing.Point(193, 382);
+            this.buttonLoadFromXML.Name = "buttonLoadFromXML";
+            this.buttonLoadFromXML.Size = new System.Drawing.Size(132, 23);
+            this.buttonLoadFromXML.TabIndex = 8;
+            this.buttonLoadFromXML.Text = "从XML文档导入配置";
+            this.buttonLoadFromXML.UseVisualStyleBackColor = true;
+            this.buttonLoadFromXML.Click += new System.EventHandler(this.buttonLoadFromXML_Click);
+            // 
+            // labelCreateFileName
+            // 
+            this.labelCreateFileName.AutoSize = true;
+            this.labelCreateFileName.Location = new System.Drawing.Point(6, 192);
+            this.labelCreateFileName.Name = "labelCreateFileName";
+            this.labelCreateFileName.Size = new System.Drawing.Size(167, 12);
+            this.labelCreateFileName.TabIndex = 0;
+            this.labelCreateFileName.Text = "自定义生成文件名（*.txt）：";
+            // 
+            // textBoxCreateFileName
+            // 
+            this.textBoxCreateFileName.Location = new System.Drawing.Point(179, 189);
+            this.textBoxCreateFileName.Name = "textBoxCreateFileName";
+            this.textBoxCreateFileName.Size = new System.Drawing.Size(216, 21);
+            this.textBoxCreateFileName.TabIndex = 0;
+            this.textBoxCreateFileName.Text = "BigDataPrint";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 385);
+            this.ClientSize = new System.Drawing.Size(614, 417);
+            this.Controls.Add(this.buttonLoadFromXML);
+            this.Controls.Add(this.labelProgress);
+            this.Controls.Add(this.buttonSaveSettings);
             this.Controls.Add(this.progressBarCreateStatus);
             this.Controls.Add(this.buttonCreateDataTest);
             this.Controls.Add(this.buttonCreateDataNow);
@@ -1182,6 +1240,7 @@ namespace BigDataCustomizationTool
             this.tabPageTimes.ResumeLayout(false);
             this.tabPageTimes.PerformLayout();
             this.tabPageOthers.ResumeLayout(false);
+            this.tabPageOthers.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1252,6 +1311,11 @@ namespace BigDataCustomizationTool
         private System.Windows.Forms.TextBox textBoxOtRandomBIN;
         private System.Windows.Forms.Label labelOtNotes;
         private System.Windows.Forms.ProgressBar progressBarCreateStatus;
+        private System.Windows.Forms.Button buttonSaveSettings;
+        private System.Windows.Forms.Label labelProgress;
+        private System.Windows.Forms.Button buttonLoadFromXML;
+        private System.Windows.Forms.Label labelCreateFileName;
+        private System.Windows.Forms.TextBox textBoxCreateFileName;
     }
 }
 

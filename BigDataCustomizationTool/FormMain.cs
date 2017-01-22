@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace BigDataCustomizationTool
 {
@@ -18,6 +19,14 @@ namespace BigDataCustomizationTool
         /// 总共要生成多少条数据，不计算内循环翻倍；comboBoxCreateTotal
         /// </summary>
         public static int GENERATE_TOTAL_NUMBER = 0;
+        /// <summary>
+        /// 基本生成语法；textBoxCreatingMethods
+        /// </summary>
+        public static string GENERATE_CREATING_STR = "";
+        /// <summary>
+        /// 是否需要初始数值位数相等？（或者说长度相等，不足前补0，例如"001"和"100"）
+        /// </summary>
+        public static string GENERATE_EQUAL_LENGTH = "no";
         /// <summary>
         /// 初始号码A、B、C、D、E
         /// </summary>
@@ -120,10 +129,12 @@ namespace BigDataCustomizationTool
         public static bool isIncreaseThreadRun = false;
     #endregion
 
+
         public FormMain()
         {
             InitializeComponent();
         }
+
 
         private void buttonCreateDataTest_Click(object sender, EventArgs e)
         {
@@ -148,6 +159,7 @@ namespace BigDataCustomizationTool
             }
         }
 
+
         private void buttonCreateDataNow_Click(object sender, EventArgs e)
         {
             if (isIncreaseThreadRun)
@@ -161,7 +173,13 @@ namespace BigDataCustomizationTool
 
             try
             {
-                FileStream aFile = new FileStream("BigDataPrint.txt", FileMode.OpenOrCreate);
+                string fileName = "";
+                if (this.textBoxCreateFileName.Text != "" && this.textBoxCreateFileName.Text.Length > 0)
+                { fileName = this.textBoxCreateFileName.Text; }
+                else
+                { fileName = "BigDataPrint.txt"; }
+
+                FileStream aFile = new FileStream(fileName, FileMode.OpenOrCreate);
                 aFile.Close();//因为后面都是Append的方式操作，先试试有木有文件！
 
                 initLocalVariables();
@@ -187,11 +205,28 @@ namespace BigDataCustomizationTool
             }
         }
 
+
+        private void textBoxCreatingMethods_DoubleClicked(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog(); //new一个方法
+
+            //"(*.et;*.xls;*.xlsx)|*.et;*.xls;*.xlsx|all|*.*"---------------如果要多种选择
+            ofd.Filter = "(*.xml|*.xml";//删选、设定文件显示类型
+            ofd.ShowDialog(); //显示打开文件的窗口
+            this.textBoxCreatingMethods.Text = ofd.FileName;//在输入框中显示xml文档路径信息
+        }
+
+
         private void initLocalVariables()
         {
             try
             {
                 myWriteStrBd = new StringBuilder(this.textBoxCreatingMethods.Text);
+                GENERATE_CREATING_STR = this.textBoxCreatingMethods.Text;
+                if (this.checkBoxEqualLength.Checked == false)
+                { GENERATE_EQUAL_LENGTH = "no"; }
+                else
+                { GENERATE_EQUAL_LENGTH = "yes"; }
                 GENERATE_TOTAL_NUMBER = Convert.ToInt32(this.comboBoxCreateTotal.Text);
 
                 ORIGINAL_NUMBER_AAAAA = Convert.ToInt32(this.textBoxBasedNumbA.Text);
@@ -233,6 +268,7 @@ namespace BigDataCustomizationTool
             }
         }
 
+
         private void isContainCurrentVariables()
         {
             string myMethodsStr = this.textBoxCreatingMethods.Text;
@@ -251,6 +287,7 @@ namespace BigDataCustomizationTool
             if (myMethodsStr.Contains(REGEX_PIN_NUMB)) { IS_CREATE_PINNUM = true; }
             if (myMethodsStr.Contains(REGEX_MOB_NUMB)) { IS_CREATE_BINNUM = true; }
         }
+
 
         private void replaceAllParamsNow()
         {
@@ -276,6 +313,7 @@ namespace BigDataCustomizationTool
             fileStreamWriteData(myWriteStrBd);//执行写入操作！
             myWriteStrBd = new StringBuilder(this.textBoxCreatingMethods.Text);//要恢复成旧的，不然生成一堆一样的
         }
+
 
         private void autoIncreaseParamsCalculate()
         {
@@ -352,15 +390,23 @@ namespace BigDataCustomizationTool
             }
         }
 
+
         private void buttonOtHelpCircleItems_Click(object sender, EventArgs e)
         {
             MessageBox.Show("使用帮助正在完善中！", "使用帮助",
                     MessageBoxButtons.OK, MessageBoxIcon.Question);
         }
 
+
         private void fileStreamWriteData(StringBuilder data)
         {
-            FileStream aFile = new FileStream("BigDataPrint.txt", FileMode.Append);
+            string fileName = "";
+            if (this.textBoxCreateFileName.Text != "" && this.textBoxCreateFileName.Text.Length > 0)
+            {fileName = this.textBoxCreateFileName.Text;}
+            else
+            {fileName = "BigDataPrint.txt";}
+
+            FileStream aFile = new FileStream(fileName, FileMode.Append);
             StreamWriter sw = new StreamWriter(aFile);
             // Write data to file.
             sw.WriteLine(data.ToString());
@@ -369,6 +415,7 @@ namespace BigDataCustomizationTool
             sw.Close();
             aFile.Close();
         }
+
 
         private void xunHuanJiSuanIng()
         {
@@ -408,6 +455,7 @@ namespace BigDataCustomizationTool
             showEndMessage(ts);
         }
 
+
         private void showEndMessage(TimeSpan ts)
         {
             MessageBox.Show("陛下，小的已经搞定了，可以收工了不？\n总计耗时为：" + ts.TotalSeconds + "秒！", "执行完毕",
@@ -415,6 +463,7 @@ namespace BigDataCustomizationTool
 
             isIncreaseThreadRun = false;
         }
+
 
         private void updateProcessBar()
         {
@@ -437,6 +486,82 @@ namespace BigDataCustomizationTool
         }
 
 
+        private void buttonSaveSettings_Click(object sender, EventArgs e)
+        {
+            initLocalVariables();//有可能用户过程中变更过设定值，因此再次初始化。
+
+            XmlDocumentLoadOrWriter.myMethodsXmlFilesWriter();
+
+            MessageBox.Show("保存完毕！", "温馨提示",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void buttonLoadFromXML_Click(object sender, EventArgs e)
+        {
+            //初步判断路径是否合法：
+            string filePath = this.textBoxCreatingMethods.Text;
+            if (filePath != "")
+            {
+                filePath = filePath.Replace("\\", "\\\\");//路径显示与String表达不一样，需要加两个“\\”
+            }
+            else//filePath
+            {
+                //路径为空就不需要执行后续步骤了！
+                MessageBox.Show("文档路径不正确或无法读取！请双击【语法规则】输入框后重新选择文件！", "提醒",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Regex reg = new Regex(filePath);
+            //Regex reg = new Regex("F:\\\\C#Projects\\\\BigDataCustomizationTool\\\\BigDataCustomizationTool\\\\bin\\Debug\\\\BigData.xml");
+            Match matchStr = reg.Match("[a-z]|[A-Z]{1}(:\\).*?(.xml)");//基本符合文件路径+基本符合XML文档格式
+            if (matchStr.Groups.Count != 1)
+            {
+                //需要判断是否文档路径，因为输入框是支持手动
+                MessageBox.Show("文档路径不正确或无法读取！请双击【语法规则】输入框后重新选择文件！", "提醒",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                XmlDocumentLoadOrWriter.myMethodsXmlFilesReader(filePath); //获得选择的文件路径
+
+                InitializeValuesFromVariable();
+            }
+        }
+
+
+        private void InitializeValuesFromVariable()
+        {
+            this.textBoxCreatingMethods.Text = GENERATE_CREATING_STR + "";
+
+            if (GENERATE_EQUAL_LENGTH.Equals("no") == true)
+            { this.checkBoxEqualLength.Checked = false; }
+            else
+            { this.checkBoxEqualLength.Checked = true; }
+
+            this.comboBoxCreateTotal.Text = GENERATE_TOTAL_NUMBER + "";
+            this.textBoxBasedNumbA.Text = ORIGINAL_NUMBER_AAAAA + "";
+            this.textBoxBasedNumbB.Text = ORIGINAL_NUMBER_BBBBB + "";
+            this.textBoxBasedNumbC.Text = ORIGINAL_NUMBER_CCCCC + "";
+            this.textBoxBasedNumbD.Text = ORIGINAL_NUMBER_DDDDD + "";
+            this.textBoxBasedNumbE.Text = ORIGINAL_NUMBER_EEEEE + "";
+            this.comboBoxIncreaseNumbA.Text = INCREASE_NUMBER_AA + "";
+            this.comboBoxIncreaseNumbB.Text = INCREASE_NUMBER_BB + "";
+            this.comboBoxIncreaseNumbC.Text = INCREASE_NUMBER_CC + "";
+            this.comboBoxIncreaseNumbD.Text = INCREASE_NUMBER_DD + "";
+            this.comboBoxIncreaseNumbE.Text = INCREASE_NUMBER_EE + "";
+            this.dateTimePickerBasedTimeA.Text = ORIGINAL_DATETIME_AAAAA + "";
+            this.dateTimePickerBasedTimeB.Text = ORIGINAL_DATETIME_BBBBB + "";
+            this.dateTimePickerBasedTimeC.Text = ORIGINAL_DATETIME_CCCCC + "";
+            this.dateTimePickerBasedTimeD.Text = ORIGINAL_DATETIME_DDDDD + "";
+            this.textBoxIncreaseTimeA.Text = INCREASE_DATETIME_AA + "";
+            this.textBoxIncreaseTimeB.Text = INCREASE_DATETIME_BB + "";
+            this.textBoxIncreaseTimeC.Text = INCREASE_DATETIME_CC + "";
+            this.textBoxIncreaseTimeD.Text = INCREASE_DATETIME_DD + "";
+
+            MessageBox.Show("从文件加载已经完成，并且相应变量值已经更新完毕！\n如果发现加载异常请检查XML文档语法及格式！", "温馨提示",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
-
